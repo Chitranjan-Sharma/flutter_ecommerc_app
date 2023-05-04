@@ -1,4 +1,12 @@
 class HomeContent {
+  static bool isLoggedIn = false;
+
+  static String dpImg =
+      'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png';
+
+  static String bgImage =
+      'https://img.freepik.com/free-vector/blue-fluid-background-frame_53876-99019.jpg';
+
   static List categoryList = [
     {
       'cName': 'Cosmetics',

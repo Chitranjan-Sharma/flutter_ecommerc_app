@@ -1,5 +1,8 @@
 import 'dart:io';
 
+import 'package:ecommerc_app/models/home_content.dart';
+import 'package:ecommerc_app/view/screen/login_screen.dart';
+import 'package:ecommerc_app/view/screen/register_screen.dart';
 import 'package:ecommerc_app/view/splash_screen/homepage.dart';
 import 'package:flutter/material.dart';
 
@@ -13,10 +16,10 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'ShopCart',
-      home: SplashScreen(),
+      home: HomeContent.isLoggedIn ? const SplashScreen() : const LoginScreen(),
     );
   }
 }
