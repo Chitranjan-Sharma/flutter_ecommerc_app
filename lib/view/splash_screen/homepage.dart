@@ -2,8 +2,10 @@ import 'dart:convert';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dio/dio.dart';
+import 'package:ecommerc_app/api/api.services.dart';
 import 'package:ecommerc_app/colors.dart';
 import 'package:ecommerc_app/models/home_content.dart';
+import 'package:ecommerc_app/view/screen/products.dart';
 import 'package:ecommerc_app/view/widgets/carousal.dart';
 import 'package:ecommerc_app/view/widgets/suggested.dart';
 import 'package:flutter/foundation.dart';
@@ -96,8 +98,13 @@ class _SplashScreenState extends State<SplashScreen> {
                   )),
                   IconButton(
                       onPressed: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Search View')));
+                        // ScaffoldMessenger.of(context).showSnackBar(
+                        //     const SnackBar(content: Text('Search View')));
+
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (content) => const ProductsScreen()));
                       },
                       icon: const Icon(Icons.search)),
                   IconButton(
@@ -194,6 +201,7 @@ class _SplashScreenState extends State<SplashScreen> {
       List items = json.data;
       setState(() {
         list = items;
+        Api.fetchCartItems();
       });
     } catch (err) {
       print(err.toString());

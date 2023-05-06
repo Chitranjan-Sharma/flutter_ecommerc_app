@@ -1,3 +1,4 @@
+import 'package:ecommerc_app/api/api.services.dart';
 import 'package:ecommerc_app/colors.dart';
 import 'package:ecommerc_app/models/home_content.dart';
 import 'package:ecommerc_app/view/screen/register_screen.dart';
@@ -7,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 
+import 'package:http/http.dart' as http;
+
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -15,6 +18,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,8 +63,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(25),
                     color: Colors.white),
-                child: const TextField(
-                  decoration: InputDecoration(
+                child: TextField(
+                  controller: emailController,
+                  decoration: const InputDecoration(
                       hintText: 'Email',
                       icon: Icon(Icons.email),
                       border: InputBorder.none),
@@ -74,8 +80,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(25),
                     color: Colors.white),
-                child: const TextField(
-                  decoration: InputDecoration(
+                child: TextField(
+                  controller: passController,
+                  decoration: const InputDecoration(
                       hintText: 'Password',
                       icon: Icon(Icons.lock),
                       border: InputBorder.none),
@@ -106,22 +113,29 @@ class _LoginScreenState extends State<LoginScreen> {
                   height: 45,
                   child: Center(
                     child: InkWell(
-                      onTap: () {},
-                      child: InkWell(
-                        onTap: () {
-                          HomeContent.isLoggedIn = true;
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (content) => const SplashScreen()));
-                        },
-                        child: const Text(
-                          'Login',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
-                              color: Colors.white),
-                        ),
+                      onTap: () {
+                        // HomeContent.isLoggedIn = true;
+                        // Navigator.push(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //         builder: (content) => const SplashScreen()));
+                        Api.email = emailController.text;
+                        Api.password = passController.text;
+                        if (Api.email.trim() != "" &&
+                            Api.password.trim() != "") {
+                          Api.fetchUsers(context);
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text('Both field required')));
+                        }
+                      },
+                      child: const Text(
+                        'Login',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                            color: Colors.white),
                       ),
                     ),
                   ),

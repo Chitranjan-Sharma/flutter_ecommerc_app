@@ -1,7 +1,9 @@
-import 'dart:ffi';
 
+
+import 'package:ecommerc_app/api/api.services.dart';
 import 'package:ecommerc_app/colors.dart';
 import 'package:ecommerc_app/models/home_content.dart';
+import 'package:ecommerc_app/models/user.model.dart';
 import 'package:ecommerc_app/view/screen/login_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +18,10 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passController = TextEditingController();
+  TextEditingController userNameController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,8 +65,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(25),
                     color: Colors.white),
-                child: const TextField(
-                  decoration: InputDecoration(
+                child: TextField(
+                  controller: userNameController,
+                  decoration: const InputDecoration(
                       hintText: 'Username',
                       icon: Icon(Icons.person),
                       border: InputBorder.none),
@@ -75,8 +82,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(25),
                     color: Colors.white),
-                child: const TextField(
-                  decoration: InputDecoration(
+                child: TextField(
+                  controller: emailController,
+                  decoration: const InputDecoration(
                       hintText: 'Email',
                       icon: Icon(Icons.email),
                       border: InputBorder.none),
@@ -91,8 +99,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(25),
                     color: Colors.white),
-                child: const TextField(
-                  decoration: InputDecoration(
+                child: TextField(
+                  controller: passController,
+                  decoration: const InputDecoration(
                       hintText: 'Password',
                       icon: Icon(Icons.lock),
                       border: InputBorder.none),
@@ -111,10 +120,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   child: Center(
                     child: InkWell(
                       onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (content) => const LoginScreen()));
+                        registerUser();
                       },
                       child: const Text(
                         'Register',
@@ -163,6 +169,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
       ),
     );
+  }
+
+  void registerUser() {
+    if (emailController.text.trim() != "" && passController.text.trim() != "") {
+      UserModel userModel = UserModel(
+          id: "",
+          userName: userNameController.text,
+          email: emailController.text,
+          password: passController.text,
+          profileImg: "default");
+
+      Api.postUser(userModel, context);
+    }
   }
 }
 
