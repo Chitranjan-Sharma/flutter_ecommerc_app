@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:intl/intl.dart';
 import 'package:ecommerc_app/models/home_content.dart';
 import 'package:ecommerc_app/view/screen/cart_screen.dart';
 import 'package:ecommerc_app/view/screen/login_screen.dart';
@@ -12,6 +12,7 @@ import 'package:http/http.dart' as http;
 import 'package:dio/dio.dart';
 
 class Api {
+ static final currencyFormat = NumberFormat("#,##0.00");
   static const String baseUrl = "http://10.0.2.2:3000/api/users";
   static Dio dio = Dio();
   static var currentUser = {};
@@ -23,6 +24,7 @@ class Api {
   static List products = [];
   static int myCartItemCount = 0;
   static List myCartProducts = [];
+  static double totalAmount = 0;
 
   static Future<List> fetchProducts(var con) async {
     try {
@@ -106,18 +108,24 @@ class Api {
       var res = await dio.get('http://10.0.2.2:3000/api/carts');
       List list = res.data['data'];
       myCartItemCount = 0;
+      totalAmount = 0;
       myCartProducts = [];
       for (var e in list) {
-        if (currentUser['_id'] == e['UserId']) {
+        if (currentUser['_id'] == e['UserId'] && e['Qty'] > 0) {
           myCartItemCount += 1;
 
           for (var p in products) {
             if (p['_id'] == e['ProductId']) {
               var cartProduct = {'Item': p, 'Qty': e['Qty']};
 
-              myCartProducts.add(cartProduct);
+              if (e['Qty'] > 0) {
+                myCartProducts.add(cartProduct);
+                totalAmount = totalAmount + p['MRP'] * e['Qty'];
+              }
             }
           }
+        } else {
+          await dio.delete('http://10.0.2.2:3000/api/carts/${e['_id']}');
         }
       }
     } catch (error) {

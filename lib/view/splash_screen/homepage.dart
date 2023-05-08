@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:ecommerc_app/api/api.services.dart';
 import 'package:ecommerc_app/colors.dart';
 import 'package:ecommerc_app/models/home_content.dart';
+import 'package:ecommerc_app/view/screen/cart_screen.dart';
 import 'package:ecommerc_app/view/screen/products.dart';
 import 'package:ecommerc_app/view/widgets/carousal.dart';
 import 'package:ecommerc_app/view/widgets/suggested.dart';
@@ -48,7 +49,7 @@ class _SplashScreenState extends State<SplashScreen> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.dashboard),
-            label: 'Categories',
+            label: 'Products',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
@@ -212,6 +213,21 @@ class _SplashScreenState extends State<SplashScreen> {
     setState(() {
       _selectedIndex = index;
     });
+
+    switch (index) {
+      case 1:
+        Api.fetchCartItems();
+        Navigator.push(context,
+            MaterialPageRoute(builder: (content) => const ProductsScreen()));
+        break;
+      case 3:
+        Api.fetchCartItems();
+        Navigator.push(context,
+            MaterialPageRoute(builder: (content) => const CartScreen()));
+        break;
+      default:
+        break;
+    }
   }
 }
 
